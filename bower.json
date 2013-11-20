@@ -1,0 +1,9 @@
+{
+  "name": "template-loader",
+  "description": "A simple template loader",
+  "version": "0.1.0",
+  "author": "Brian Mancini <bmancini@gmail.com>",
+  "dependencies": {
+    "jquery": "~2.0.3"
+  }
+}
