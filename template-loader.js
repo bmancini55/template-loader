@@ -24,7 +24,7 @@ var templateLoader = (function () {
         if (reg.state == STATES.unloaded) {
             $.ajax({
                 url: reg.path,
-                async: async || false,
+                async: async,
                 success: function (data) {
                     reg.html = data;
                     reg.state = STATES.loaded;
@@ -41,9 +41,9 @@ var templateLoader = (function () {
     return {
         /** Register a new template
         * @param {object} obj - registration object that contains key and either path or data
-        * @param {bool} loadNow - indicates if the template should be loaded immediately
+        * @param {bool} loadNow - indicates if the template should be syncrhonously now
         */
-        register: function (obj, loadNow) {
+        register: function (obj, loadSync) {
             // do some validation
             if (!obj.key)
                 throw "templates.register requires a key value";
@@ -54,8 +54,10 @@ var templateLoader = (function () {
             var reg = new registration(obj.key, obj.path, obj.data);
             registrations[reg.key] = reg;
 
-            // optionally load stuff                     
-            if (typeof loadNow !== 'undefined' ? loadNow : true)
+            // optionally load stuff            
+            if (loadSync)
+                load(reg, false);
+            else 
                 load(reg, true);
         },
         /** Get a template's html
@@ -69,7 +71,7 @@ var templateLoader = (function () {
 
             // load if necessary
             if (reg.state == STATES.unloaded) {
-                load(reg);
+                load(reg, false);
             }
             return reg.html
         }
